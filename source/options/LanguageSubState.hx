@@ -26,6 +26,7 @@ import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
 import Controls;
 import openfl.Lib;
+import ClientPrefs;
 
 using StringTools;
 
@@ -42,6 +43,7 @@ class LanguageSubState extends BaseOptionsMenu
 			'english', //Save data variable name
 			'bool', //Variable type
 			true); //Default value
+		option.onChange = onEnglishChange;
 		addOption(option);
 
 		//I'd suggest using "Low Quality" as an example for making your own option since it is the simplest here
@@ -55,8 +57,18 @@ class LanguageSubState extends BaseOptionsMenu
 
 		super();
 	}
+
 	function onPortugueseChange()
 	{
-		if(ClientPrefs.portuguese)
-			
+		if(ClientPrefs.portuguese) {
+			ClientPrefs.english = false;
+		}
+	}
+
+	function onEnglishChange()
+	{
+		if(ClientPrefs.english) {
+			ClientPrefs.portuguese = false;
+		}
+	}
 }
