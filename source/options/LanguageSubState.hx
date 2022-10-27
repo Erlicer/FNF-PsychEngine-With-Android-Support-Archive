@@ -56,4 +56,7 @@ class LanguageSubState extends BaseOptionsMenu
 		super();
 	}
 	function onPortugueseChange()
+	{
+		if(ClientPrefs.portuguese)
+			
 }
