@@ -1,42 +1,58 @@
 package android.flixel;
 
 import android.flixel.FlxButton;
+import flash.display.Shape;
+import flash.display.BitmapData;
 import flixel.FlxG;
-import flixel.FlxSprite;
 import flixel.util.FlxDestroyUtil;
-import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.graphics.FlxGraphic;
-import flixel.tweens.FlxTween;
-import flixel.tweens.FlxEase;
 import flixel.group.FlxSpriteGroup;
-import openfl.utils.Assets;
 
 /**
- * A zone with 4 buttons (A hitbox).
- * It's easy to customize the layout.
+ * A zone with 4 hint's (A hitbox).
+ * It's really easy to customize the layout.
  *
- * @author: Saw (M.A. Jigsaw)
+ * @author Mihai Alexandru (M.A. Jigsaw)
  */
+
+enum Modes
+{
+	DEFAULT;
+	SINGLEDODGE;
+}
+
 class FlxHitbox extends FlxSpriteGroup
 {
 	public var buttonLeft:FlxButton = new FlxButton(0, 0);
 	public var buttonDown:FlxButton = new FlxButton(0, 0);
 	public var buttonUp:FlxButton = new FlxButton(0, 0);
 	public var buttonRight:FlxButton = new FlxButton(0, 0);
+	public var buttonDodge:FlxButton = new FlxButton(0, 0);
 
 	/**
 	 * Create the zone.
 	 */
-	public function new()
+	public function new(mode:Modes)
 	{
 		super();
 
-		scrollFactor.set();
+		final offsetFir:Int = (FlxG.save.data.mechsInputVariants ? Std.int(FlxG.height / 4) * 3 : 0);
+		final offsetSec:Int = (FlxG.save.data.mechsInputVariants ? 0 : Std.int(FlxG.height / 4));
 
-		add(buttonLeft = createHint(0, 0, 'left', 0xFF00FF));
-		add(buttonDown = createHint(FlxG.width / 4, 0, 'down', 0x00FFFF));
-		add(buttonUp = createHint(FlxG.width / 2, 0, 'up', 0x00FF00));
-		add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), 0, 'right', 0xFF0000));
+		switch (mode)
+		{
+			case DEFAULT:
+				add(buttonLeft = createHint(0, 0, Std.int(FlxG.width / 4), FlxG.height, 0xFF00FF));
+				add(buttonDown = createHint(FlxG.width / 4, 0, Std.int(FlxG.width / 4), FlxG.height, 0x00FFFF));
+				add(buttonUp = createHint(FlxG.width / 2, 0, Std.int(FlxG.width / 4), FlxG.height, 0x00FF00));
+				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), 0, Std.int(FlxG.width / 4), FlxG.height, 0xFF0000));
+			case SINGLEDODGE:
+				add(buttonLeft = createHint(0, offsetFir, Std.int(FlxG.width / 4), 540, 0xFF00FF));
+				add(buttonDown = createHint(FlxG.width / 4, offsetFir, Std.int(FlxG.width / 4), 540, 0x00FFFF));
+				add(buttonUp = createHint(FlxG.width / 2, offsetFir, Std.int(FlxG.width / 4), 540, 0x00FF00));
+				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), offsetFir, Std.int(FlxG.width / 4), 540, 0xFF0000));
+				add(buttonDodge = createHint(0, offsetSec, FlxG.width, Std.int(FlxG.height / 4), 0xFFFF00));
+		}
+			scrollFactor.set();
 	}
 
 	/**
@@ -50,44 +66,42 @@ class FlxHitbox extends FlxSpriteGroup
 		buttonDown = null;
 		buttonUp = null;
 		buttonRight = null;
+		buttonDodge = null;
 	}
 
-	private function createHint(X:Float, Y:Float, Graphic:String, Color:Int = 0xFFFFFF):FlxButton
+	private function createHintGraphic(Width:Int, Height:Int, Color:Int = 0xFFFFFF):BitmapData
 	{
-		var hintTween:FlxTween = null;
+		var shape:Shape = new Shape();
+		shape.graphics.beginFill(Color);
+		shape.graphics.lineStyle(10, Color, 1);
+		shape.graphics.drawRect(0, 0, Width, Height);
+		shape.graphics.endFill();
+
+		var bitmap:BitmapData = new BitmapData(Width, Height, true, 0);
+		bitmap.draw(shape);
+		return bitmap;
+	}
+
+	private function createHint(X:Float, Y:Float, Width:Int, Height:Int, Color:Int = 0xFFFFFF):FlxButton
+	{
 		var hint:FlxButton = new FlxButton(X, Y);
-		hint.loadGraphic(FlxGraphic.fromFrame(FlxAtlasFrames.fromSparrow(Assets.getBitmapData('assets/android/hitbox.png'),
-			Assets.getText('assets/android/hitbox.xml'))
-			.getByName(Graphic)));
-		hint.setGraphicSize(Std.int(FlxG.width / 4), FlxG.height);
-		hint.updateHitbox();
+		hint.loadGraphic(createHintGraphic(Width, Height, Color));
 		hint.solid = false;
 		hint.immovable = true;
 		hint.scrollFactor.set();
-		hint.color = Color;
 		hint.alpha = 0.00001;
 		hint.onDown.callback = function()
 		{
-			if (hintTween != null)
-				hintTween.cancel();
-
-			hintTween = FlxTween.tween(hint, {alpha: AndroidControls.getOpacity()}, 0.001, {ease: FlxEase.circInOut, onComplete: function(twn:FlxTween)
-			{
-				hintTween = null;
-			}});
+			if (hint.alpha != AndroidControls.getOpacity(true))
+				hint.alpha = AndroidControls.getOpacity(true);
 		}
 		hint.onUp.callback = function()
 		{
-			if (hintTween != null)
-				hintTween.cancel();
-
-			hintTween = FlxTween.tween(hint, {alpha: 0.00001}, 0.001, {ease: FlxEase.circInOut,	onComplete: function(twn:FlxTween)
-			{
-				hintTween = null;
-			}});
+			if (hint.alpha != 0.00001)
+				hint.alpha = 0.00001;
 		}
-		hint.onOver.callback = hint.onDown.callback;
 		hint.onOut.callback = hint.onUp.callback;
+		hint.onOver.callback = hint.onDown.callback;
 		#if FLX_DEBUG
 		hint.ignoreDrawDebug = true;
 		#end
