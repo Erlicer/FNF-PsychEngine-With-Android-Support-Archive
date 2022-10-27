@@ -50,8 +50,10 @@ class LanguageSubState extends BaseOptionsMenu
 			'portuguese', //Save data variable name
 			'bool', //Variable type
 			false); //Default value
+		option.onChange = onPortugueseChange;
 		addOption(option);
 
 		super();
 	}
+	function onPortugueseChange()
 }
