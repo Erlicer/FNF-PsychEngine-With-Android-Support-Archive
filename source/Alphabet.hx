@@ -21,11 +21,14 @@ class Alphabet extends FlxSpriteGroup
 
 	// for menu shit
 	public var forceX:Float = Math.NEGATIVE_INFINITY;
+	public var forceY:Float = Math.NEGATIVE_INFINITY;
+	public var targetX:Float = 0;
 	public var targetY:Float = 0;
 	public var yMult:Float = 120;
 	public var xAdd:Float = 0;
 	public var yAdd:Float = 0;
 	public var isMenuItem:Bool = false;
+	public var isMenuItemAchieve:Bool = false;
 	public var textSize:Float = 1.0;
 
 	public var text:String = "";
@@ -51,6 +54,7 @@ class Alphabet extends FlxSpriteGroup
 	{
 		super(x, y);
 		forceX = Math.NEGATIVE_INFINITY;
+		forceY = Math.NEGATIVE_INFINITY;
 		this.textSize = textSize;
 
 		_finalText = text;
@@ -355,6 +359,19 @@ class Alphabet extends FlxSpriteGroup
 				x = forceX;
 			} else {
 				x = FlxMath.lerp(x, (targetY * 20) + 90 + xAdd, lerpVal);
+			}
+		}
+
+		if (isMenuItemAchieve)
+		{
+			var scaledX = FlxMath.remapToRange(targetX, 1.1, 0, 0, 1.3);
+
+			var lerpVal:Float = CoolUtil.boundTo(elapsed * 9.6, 0, 1);
+			x = FlxMath.lerp(x, scaledX + yMult + (FlxG.height * 0.48) + xAdd + 150, lerpVal);
+			if(forceY != Math.NEGATIVE_INFINITY) {
+				y = forceY;
+			} else {
+				y = FlxMath.lerp(y, (targetX * 20) + 90 + yAdd, lerpVal);
 			}
 		}
 
