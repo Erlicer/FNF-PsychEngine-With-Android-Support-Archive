@@ -24,24 +24,30 @@ import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
 import Controls;
+import ClientPrefs;
 
 using StringTools;
 
 class OptionsState extends MusicBeatState
 {
-	if(FlxG.save.data.portuguese == false) {
+	if(ClientPrefs.portugese == false)
+	{
 		var options:Array<String> = ['Language','Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay'];
 	}
-	if(FlxG.save.data.portuguese == true) {
+
+	if(ClientPrefs.portuguese == true)
+	{
 		var options:Array<String> = ['Linguagem','Cor das Notas', 'Controles', 'Ajustar Delay e Combo', 'Graficos', 'Visuais e UI', 'Gameplay'];
 	}
+
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
 
 	function openSelectedSubstate(label:String) {
 		switch(label) {
-			if(FlxG.save.data.portuguese == false) {
+			if(ClientPrefs.portuguese == false)
+			{
 				case 'Language':
 					#if android
 					removeVirtualPad();
@@ -75,7 +81,8 @@ class OptionsState extends MusicBeatState
 				case 'Adjust Delay and Combo':
 					LoadingState.loadAndSwitchState(new options.NoteOffsetState());
 			}
-			if(FlxG.save.data.portuguese == true) {
+			if(ClientPrefs.portuguese == true)
+			{
 				case 'Linguagem':
 					#if android
 					removeVirtualPad();
