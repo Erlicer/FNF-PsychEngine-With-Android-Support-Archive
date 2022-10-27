@@ -29,7 +29,11 @@ using StringTools;
 
 class OptionsState extends MusicBeatState
 {
-	var options:Array<String> = ['Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay'];
+	if(FlxG.save.data.portuguese == false) {
+		var options:Array<String> = ['Language','Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay'];
+	} else {
+		var options:Array<String> = ['Linguagem','Cor das Notas', 'Controles', 'Ajustar Delay e Combo', 'Graficos', 'Visuais e UI', 'Gameplay'];
+	}
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
