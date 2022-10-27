@@ -19,6 +19,8 @@ import flixel.util.FlxColor;
 import lime.app.Application;
 import Achievements;
 import editors.MasterEditorMenu;
+import GameJoltState;
+import TrophyAchieve;
 import flixel.input.keyboard.FlxKey;
 
 using StringTools;
@@ -53,7 +55,6 @@ class MainMenuState extends MusicBeatState
 		Paths.pushGlobalMods();
 		#end
 		WeekData.loadTheFirstEnabledMod();
-
 		#if desktop
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
@@ -155,6 +156,9 @@ class MainMenuState extends MusicBeatState
 			}
 		}
 		#end
+		if(FlxG.save.data.gJLogged != null) {
+		TrophyAchieve.CheckAchieve();
+		}
 
 		#if android
 		addVirtualPad(UP_DOWN, A_B_E);
@@ -264,7 +268,7 @@ class MainMenuState extends MusicBeatState
 			else if (FlxG.keys.anyJustPressed(debugKeys) #if android || virtualPad.buttonE.justPressed #end)
 			{
 				selectedSomethin = true;
-				MusicBeatState.switchState(new MasterEditorMenu());
+				MusicBeatState.switchState(new GameJoltState());
 			}
 			#end
 		}
