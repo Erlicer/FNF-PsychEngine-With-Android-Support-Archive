@@ -35,79 +35,70 @@ class OptionsState extends MusicBeatState
 	public static var menuBG:FlxSprite;
 
 	var options:Array<String> = if(ClientPrefs.portuguese == false) { ['Language','Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay']; }
-	else { if(ClientPrefs.portuguese == true) { ['Linguagem','Cor das Notas', 'Controles', 'Ajustar Delay e Combo', 'Graficos', 'Visuais e UI', 'Gameplay']; }}
+	else { if(ClientPrefs.portuguese == true) { ['Linguagem','Cores das Notas', 'Controles', 'Ajustar Combo e Delay', 'Graficos', 'Visuais e UI', 'Gameplay']; }}
 
 	function openSelectedSubstate(label:String) {
 		switch(label) {
-			if(ClientPrefs.portuguese == false)
 			{
-				case 'Language':
+				if(ClientPrefs.portuguese == false) { case 'Language':
 					#if android
 					removeVirtualPad();
 					#end
-					openSubState(new options.LanguageSubState());
-				case 'Note Colors':
+					openSubState(new options.LanguageSubState()); }
+				if(ClientPrefs.portuguese == true) { case 'Linguagem':
 					#if android
 					removeVirtualPad();
 					#end
-					openSubState(new options.NotesSubState());
-				case 'Controls':
+					openSubState(new options.LanguageSubState()); }
+				if(ClientPrefs.portuguese == false) { case 'Note Colors':
 					#if android
 					removeVirtualPad();
 					#end
-					openSubState(new options.ControlsSubState());
-				case 'Graphics':
+					openSubState(new options.NotesSubState()); }
+				if(ClientPrefs.portuguese == true) { case 'Cores das Notas':
 					#if android
 					removeVirtualPad();
 					#end
-					openSubState(new options.GraphicsSettingsSubState());
-				case 'Visuals and UI':
+					openSubState(new options.NotesSubState()); }
+				if(ClientPrefs.portuguese == false) { case 'Controls':
 					#if android
 					removeVirtualPad();
 					#end
-					openSubState(new options.VisualsUISubState());
+					openSubState(new options.ControlsSubState()); }
+				if(ClientPrefs.portuguese == true) { case 'Controles':
+					#if android
+					removeVirtualPad();
+					#end
+					openSubState(new options.ControlsSubState()); }
+				if(ClientPrefs.portuguese == false) { case 'Graphics':
+					#if android
+					removeVirtualPad();
+					#end
+					openSubState(new options.GraphicsSettingsSubState()); }
+				if(ClientPrefs.portuguese == true) { case 'Graficos':
+					#if android
+					removeVirtualPad();
+					#end
+					openSubState(new options.GraphicsSettingsSubState()); }
+				if(ClientPrefs.portuguese == false) { case 'Visuals and UI':
+					#if android
+					removeVirtualPad();
+					#end
+					openSubState(new options.VisualsUISubState()); }
+				if(ClientPrefs.portuguese == true) { case: 'Visuais e UI':
+					#if android
+					removeVirtualPad();
+					#end
+					openSubState(new options.VisualsUISubState()); }
 				case 'Gameplay':
 					#if android
 					removeVirtualPad();
 					#end
 					openSubState(new options.GameplaySettingsSubState());
-				case 'Adjust Delay and Combo':
-					LoadingState.loadAndSwitchState(new options.NoteOffsetState());
-			}
-			if(ClientPrefs.portuguese == true)
-			{
-				case 'Linguagem':
-					#if android
-					removeVirtualPad();
-					#end
-					openSubState(new options.LanguageSubState());
-				case 'Cor das Notas':
-					#if android
-					removeVirtualPad();
-					#end
-					openSubState(new options.NotesSubState());
-				case 'Controles':
-					#if android
-					removeVirtualPad();
-					#end
-					openSubState(new options.ControlsSubState());
-				case 'Graficos':
-					#if android
-					removeVirtualPad();
-					#end
-					openSubState(new options.GraphicsSettingsSubState());
-				case 'Visuais e UI':
-					#if android
-					removeVirtualPad();
-					#end
-					openSubState(new options.VisualsUISubState());
-				case 'Gameplay':
-					#if android
-					removeVirtualPad();
-					#end
-					openSubState(new options.GameplaySettingsSubState());
-				case 'Ajustar Delay e Combo':
-					LoadingState.loadAndSwitchState(new options.NoteOffsetState());
+				if(ClientPrefs.portuguese == false) { case 'Adjust Delay and Combo':
+					LoadingState.loadAndSwitchState(new options.NoteOffsetState()); }
+				if(ClientPrefs.portuguese == true) { case 'Ajustar Combo e Delay':
+					LoadingState.loadAndSwitchState(new options.NoteOffsetState()); }
 			}
 		}
 	}
