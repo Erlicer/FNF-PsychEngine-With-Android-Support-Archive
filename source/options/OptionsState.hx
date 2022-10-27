@@ -34,15 +34,8 @@ class OptionsState extends MusicBeatState
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
 
-	if}(ClientPrefs.portugese == false)
-	{
-		var options:Array<String> = ['Language','Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay'];
-	}
-
-	if(ClientPrefs.portuguese == true)
-	{
-		var options:Array<String> = ['Linguagem','Cor das Notas', 'Controles', 'Ajustar Delay e Combo', 'Graficos', 'Visuais e UI', 'Gameplay'];
-	}
+	var options:Array<String> = if(ClientPrefs.portuguese == false) { ['Language','Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay']; }
+	else { if(ClientPrefs.portuguese == true) { ['Linguagem','Cor das Notas', 'Controles', 'Ajustar Delay e Combo', 'Graficos', 'Visuais e UI', 'Gameplay']; }}
 
 	function openSelectedSubstate(label:String) {
 		switch(label) {
