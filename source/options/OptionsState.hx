@@ -24,82 +24,50 @@ import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
 import Controls;
-import ClientPrefs;
 
 using StringTools;
 
 class OptionsState extends MusicBeatState
 {
+	var options:Array<String> = ['Language','Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay'];
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
 
-	var options:Array<String> = if(ClientPrefs.portuguese == false) { ['Language','Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay']; }
-	else { if(ClientPrefs.portuguese == true) { ['Linguagem','Cores das Notas', 'Controles', 'Ajustar Combo e Delay', 'Graficos', 'Visuais e UI', 'Gameplay']; }}
-
 	function openSelectedSubstate(label:String) {
 		switch(label) {
-			{
-				if(ClientPrefs.portuguese == false) { case 'Language':
-					#if android
-					removeVirtualPad();
-					#end
-					openSubState(new options.LanguageSubState()); }
-				if(ClientPrefs.portuguese == true) { case 'Linguagem':
-					#if android
-					removeVirtualPad();
-					#end
-					openSubState(new options.LanguageSubState()); }
-				if(ClientPrefs.portuguese == false) { case 'Note Colors':
-					#if android
-					removeVirtualPad();
-					#end
-					openSubState(new options.NotesSubState()); }
-				if(ClientPrefs.portuguese == true) { case 'Cores das Notas':
-					#if android
-					removeVirtualPad();
-					#end
-					openSubState(new options.NotesSubState()); }
-				if(ClientPrefs.portuguese == false) { case 'Controls':
-					#if android
-					removeVirtualPad();
-					#end
-					openSubState(new options.ControlsSubState()); }
-				if(ClientPrefs.portuguese == true) { case 'Controles':
-					#if android
-					removeVirtualPad();
-					#end
-					openSubState(new options.ControlsSubState()); }
-				if(ClientPrefs.portuguese == false) { case 'Graphics':
-					#if android
-					removeVirtualPad();
-					#end
-					openSubState(new options.GraphicsSettingsSubState()); }
-				if(ClientPrefs.portuguese == true) { case 'Graficos':
-					#if android
-					removeVirtualPad();
-					#end
-					openSubState(new options.GraphicsSettingsSubState()); }
-				if(ClientPrefs.portuguese == false) { case 'Visuals and UI':
-					#if android
-					removeVirtualPad();
-					#end
-					openSubState(new options.VisualsUISubState()); }
-				if(ClientPrefs.portuguese == true) { case: 'Visuais e UI':
-					#if android
-					removeVirtualPad();
-					#end
-					openSubState(new options.VisualsUISubState()); }
-				case 'Gameplay':
-					#if android
-					removeVirtualPad();
-					#end
-					openSubState(new options.GameplaySettingsSubState());
-				if(ClientPrefs.portuguese == false) { case 'Adjust Delay and Combo':
-					LoadingState.loadAndSwitchState(new options.NoteOffsetState()); }
-				if(ClientPrefs.portuguese == true) { case 'Ajustar Combo e Delay':
-					LoadingState.loadAndSwitchState(new options.NoteOffsetState()); }
-			}
+			case 'Language':
+				#if android
+				removeVirtualPad();
+				#end
+				openSubState(new options.LanguageSubState());
+			case 'Note Colors':
+				#if android
+				removeVirtualPad();
+				#end
+				openSubState(new options.NotesSubState());
+			case 'Controls':
+				#if android
+				removeVirtualPad();
+				#end
+				openSubState(new options.ControlsSubState());
+			case 'Graphics':
+				#if android
+				removeVirtualPad();
+				#end
+				openSubState(new options.GraphicsSettingsSubState());
+			case 'Visuals and UI':
+				#if android
+				removeVirtualPad();
+				#end
+				openSubState(new options.VisualsUISubState());
+			case 'Gameplay':
+				#if android
+				removeVirtualPad();
+				#end
+				openSubState(new options.GameplaySettingsSubState());
+			case 'Adjust Delay and Combo':
+				LoadingState.loadAndSwitchState(new options.NoteOffsetState());
 		}
 	}
 
@@ -177,6 +145,15 @@ class OptionsState extends MusicBeatState
 		if (controls.ACCEPT) {
 			openSelectedSubstate(options[curSelected]);
 		}
+
+		#if android
+		if (virtualPad.buttonC.justPressed) {
+			#if android
+			removeVirtualPad();
+			#end
+			openSubState(new android.AndroidControlsSubState());
+		}
+		#end
 	}
 	
 	function changeSelection(change:Int = 0) {
