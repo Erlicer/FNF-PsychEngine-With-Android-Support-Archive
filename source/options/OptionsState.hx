@@ -31,7 +31,8 @@ class OptionsState extends MusicBeatState
 {
 	if(FlxG.save.data.portuguese == false) {
 		var options:Array<String> = ['Language','Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay'];
-	} else {
+	}
+	if(FlxG.save.data.portuguese == true) {
 		var options:Array<String> = ['Linguagem','Cor das Notas', 'Controles', 'Ajustar Delay e Combo', 'Graficos', 'Visuais e UI', 'Gameplay'];
 	}
 	private var grpOptions:FlxTypedGroup<Alphabet>;
@@ -73,7 +74,8 @@ class OptionsState extends MusicBeatState
 					openSubState(new options.GameplaySettingsSubState());
 				case 'Adjust Delay and Combo':
 					LoadingState.loadAndSwitchState(new options.NoteOffsetState());
-			} else {
+			}
+			if(FlxG.save.data.portuguese == true) {
 				case 'Linguagem':
 					#if android
 					removeVirtualPad();
