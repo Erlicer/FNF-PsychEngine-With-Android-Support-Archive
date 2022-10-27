@@ -41,7 +41,7 @@ class LanguageSubState extends BaseOptionsMenu
 			'If checked, enable english language.', //Description
 			'english', //Save data variable name
 			'bool', //Variable type
-			false); //Default value
+			true); //Default value
 		addOption(option);
 
 		//I'd suggest using "Low Quality" as an example for making your own option since it is the simplest here
