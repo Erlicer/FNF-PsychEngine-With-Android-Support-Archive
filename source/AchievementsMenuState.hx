@@ -14,6 +14,7 @@ import flixel.util.FlxColor;
 import lime.utils.Assets;
 import flixel.FlxSubState;
 import Achievements;
+import PlayState;
 
 using StringTools;
 
@@ -26,6 +27,7 @@ class AchievementsMenuState extends MusicBeatState
 	private var achievementArray:Array<AttachedAchievement> = [];
 	private var achievementIndex:Array<Int> = [];
 	private var descText:FlxText;
+	private var nameText:FlxText;
 
 	override function create() {
 		#if desktop
@@ -39,6 +41,13 @@ class AchievementsMenuState extends MusicBeatState
 		menuBG.antialiasing = ClientPrefs.globalAntialiasing;
 		add(menuBG);
 
+		var menuBG2:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuGradient'));
+		menuBG2.setGraphicSize(Std.int(menuBG.width * 1.1));
+		menuBG2.updateHitbox();
+		menuBG2.screenCenter();
+		menuBG2.antialiasing = ClientPrefs.globalAntialiasing;
+		add(menuBG2);
+
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
 
@@ -51,21 +60,29 @@ class AchievementsMenuState extends MusicBeatState
 		}
 
 		for (i in 0...options.length) {
+			
 			var achieveName:String = Achievements.achievementsStuff[achievementIndex[i]][2];
-			var optionText:Alphabet = new Alphabet(0, (100 * i) + 210, Achievements.isAchievementUnlocked(achieveName) ? Achievements.achievementsStuff[achievementIndex[i]][0] : '?', false, false);
-			optionText.isMenuItem = true;
-			optionText.x += 280;
-			optionText.xAdd = 200;
-			optionText.targetY = i;
+			var optionText:Alphabet = new Alphabet(0 + i, 255, "", false, false);
+			optionText.isMenuItemAchieve = true;
+			optionText.x += 860;
+			optionText.forceY = 225;
+			optionText.xAdd = 600;
 			grpOptions.add(optionText);
 
-			var icon:AttachedAchievement = new AttachedAchievement(optionText.x - 105, optionText.y, achieveName);
+			var icon:AttachedAchievement = new AttachedAchievement(optionText.x + 700, optionText.y, achieveName);
+			optionText.targetX = optionText.x * 2 + 300;
 			icon.sprTracker = optionText;
 			achievementArray.push(icon);
 			add(icon);
 		}
 
-		descText = new FlxText(150, 600, 980, "", 32);
+		nameText = new FlxText(150, 0, 980, "", 50);
+		nameText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.YELLOW, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		nameText.scrollFactor.set();
+		nameText.borderSize = 2.4;
+		add(nameText);
+
+		descText = new FlxText(150, 550, 980, "", 32);
 		descText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		descText.scrollFactor.set();
 		descText.borderSize = 2.4;
@@ -74,7 +91,7 @@ class AchievementsMenuState extends MusicBeatState
 		changeSelection();
 
 		#if android
-		addVirtualPad(UP_DOWN, B);
+		addVirtualPad(LEFT_RIGHT, B);
 		#end
 
 		super.create();
@@ -83,10 +100,19 @@ class AchievementsMenuState extends MusicBeatState
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (controls.UI_UP_P) {
+		for (ii in 0...Achievements.achievementsStuff.length) {
+
+			var tagK:String = Achievements.achievementsStuff[achievementIndex[ii]][2];
+
+			if(!Achievements.isAchievementUnlocked(tagK)) {
+				nameText.text = Achievements.achievementsStuff[achievementIndex[curSelected]][0];
+			}
+		}
+
+		if (controls.UI_RIGHT_P) {
 			changeSelection(-1);
 		}
-		if (controls.UI_DOWN_P) {
+		if (controls.UI_LEFT_P) {
 			changeSelection(1);
 		}
 
@@ -97,6 +123,7 @@ class AchievementsMenuState extends MusicBeatState
 	}
 
 	function changeSelection(change:Int = 0) {
+
 		curSelected += change;
 		if (curSelected < 0)
 			curSelected = options.length - 1;
@@ -106,11 +133,11 @@ class AchievementsMenuState extends MusicBeatState
 		var bullShit:Int = 0;
 
 		for (item in grpOptions.members) {
-			item.targetY = bullShit - curSelected;
+			item.targetX = bullShit - curSelected;
 			bullShit++;
 
 			item.alpha = 0.6;
-			if (item.targetY == 0) {
+			if (item.targetX == 0) {
 				item.alpha = 1;
 			}
 		}
@@ -121,6 +148,7 @@ class AchievementsMenuState extends MusicBeatState
 				achievementArray[i].alpha = 1;
 			}
 		}
+
 		descText.text = Achievements.achievementsStuff[achievementIndex[curSelected]][1];
 		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 	}
