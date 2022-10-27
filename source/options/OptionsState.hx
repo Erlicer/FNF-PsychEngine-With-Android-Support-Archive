@@ -34,7 +34,7 @@ class OptionsState extends MusicBeatState
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
 
-	if(ClientPrefs.portugese == false)
+	if}(ClientPrefs.portugese == false)
 	{
 		var options:Array<String> = ['Language','Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay'];
 	}
