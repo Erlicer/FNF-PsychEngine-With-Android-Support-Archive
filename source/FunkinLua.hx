@@ -210,6 +210,8 @@ class FunkinLua {
 		set('shadersEnabled', ClientPrefs.shaders);
 		set('scriptName', scriptName);
 		set('currentModDirectory', Paths.currentModDirectory);
+		set('portugueseLanguage', ClientPrefs.portuguese);
+		set('englishLanguage', ClientPrefs.english);
 
 		#if windows
 		set('buildTarget', 'windows');
