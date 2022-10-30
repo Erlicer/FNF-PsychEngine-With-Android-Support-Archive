@@ -1,11 +1,10 @@
 package android.flixel;
 
-import android.flixel.FlxButton;
-import flash.display.Shape;
 import flash.display.BitmapData;
+import flash.display.Shape;
 import flixel.FlxG;
-import flixel.util.FlxDestroyUtil;
 import flixel.group.FlxSpriteGroup;
+import android.flixel.FlxButton;
 
 /**
  * A zone with 4 hint's (A hitbox).
@@ -13,46 +12,26 @@ import flixel.group.FlxSpriteGroup;
  *
  * @author Mihai Alexandru (M.A. Jigsaw)
  */
-
-enum Modes
-{
-	DEFAULT;
-	SINGLEDODGE;
-}
-
 class FlxHitbox extends FlxSpriteGroup
 {
 	public var buttonLeft:FlxButton = new FlxButton(0, 0);
 	public var buttonDown:FlxButton = new FlxButton(0, 0);
 	public var buttonUp:FlxButton = new FlxButton(0, 0);
 	public var buttonRight:FlxButton = new FlxButton(0, 0);
-	public var buttonDodge:FlxButton = new FlxButton(0, 0);
 
 	/**
 	 * Create the zone.
 	 */
-	public function new(mode:Modes)
+	public function new()
 	{
 		super();
 
-		final offsetFir:Int = (FlxG.save.data.mechsInputVariants ? Std.int(FlxG.height / 4) * 3 : 0);
-		final offsetSec:Int = (FlxG.save.data.mechsInputVariants ? 0 : Std.int(FlxG.height / 4));
+		add(buttonLeft = createHint(0, 0, Std.int(FlxG.width / 4), FlxG.height, 0xFF00FF));
+		add(buttonDown = createHint(FlxG.width / 4, 0, Std.int(FlxG.width / 4), FlxG.height, 0x00FFFF));
+		add(buttonUp = createHint(FlxG.width / 2, 0, Std.int(FlxG.width / 4), FlxG.height, 0x00FF00));
+		add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), 0, Std.int(FlxG.width / 4), FlxG.height, 0xFF0000));
 
-		switch (mode)
-		{
-			case DEFAULT:
-				add(buttonLeft = createHint(0, 0, Std.int(FlxG.width / 4), FlxG.height, 0xFF00FF));
-				add(buttonDown = createHint(FlxG.width / 4, 0, Std.int(FlxG.width / 4), FlxG.height, 0x00FFFF));
-				add(buttonUp = createHint(FlxG.width / 2, 0, Std.int(FlxG.width / 4), FlxG.height, 0x00FF00));
-				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), 0, Std.int(FlxG.width / 4), FlxG.height, 0xFF0000));
-			case SINGLEDODGE:
-				add(buttonLeft = createHint(0, offsetFir, Std.int(FlxG.width / 4), 540, 0xFF00FF));
-				add(buttonDown = createHint(FlxG.width / 4, offsetFir, Std.int(FlxG.width / 4), 540, 0x00FFFF));
-				add(buttonUp = createHint(FlxG.width / 2, offsetFir, Std.int(FlxG.width / 4), 540, 0x00FF00));
-				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), offsetFir, Std.int(FlxG.width / 4), 540, 0xFF0000));
-				add(buttonDodge = createHint(0, offsetSec, FlxG.width, Std.int(FlxG.height / 4), 0xFFFF00));
-		}
-			scrollFactor.set();
+		scrollFactor.set();
 	}
 
 	/**
@@ -66,7 +45,6 @@ class FlxHitbox extends FlxSpriteGroup
 		buttonDown = null;
 		buttonUp = null;
 		buttonRight = null;
-		buttonDodge = null;
 	}
 
 	private function createHintGraphic(Width:Int, Height:Int, Color:Int = 0xFFFFFF):BitmapData
@@ -92,8 +70,8 @@ class FlxHitbox extends FlxSpriteGroup
 		hint.alpha = 0.00001;
 		hint.onDown.callback = function()
 		{
-			if (hint.alpha != AndroidControls.getOpacity(true))
-				hint.alpha = AndroidControls.getOpacity(true);
+			if (hint.alpha != 0.2)
+				hint.alpha = 0.2;
 		}
 		hint.onUp.callback = function()
 		{
