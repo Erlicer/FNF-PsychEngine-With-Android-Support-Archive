@@ -5,6 +5,9 @@ import flash.display.Shape;
 import flixel.FlxG;
 import flixel.group.FlxSpriteGroup;
 import android.flixel.FlxButton;
+import flixel.util.FlxColor;
+import flixel.util.FlxDestroyUtil;
+import flixel.group.FlxSpriteGroup;
 
 /**
  * A zone with 4 hint's (A hitbox).
