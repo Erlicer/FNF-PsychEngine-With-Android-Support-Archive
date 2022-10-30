@@ -1,20 +1,14 @@
 package android;
 
+import android.flixel.FlxHitbox;
+import android.flixel.FlxVirtualPad;
 import flixel.FlxG;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
 import flixel.util.FlxDestroyUtil;
-import android.flixel.FlxHitbox;
-import android.flixel.FlxVirtualPad;
 
-/**
- * @author Mihai Alexandru (M.A. Jigsaw)
- */
 class AndroidControls extends FlxSpriteGroup
 {
-	public static var customVirtualPad(get, set):FlxVirtualPad;
-	public static var mode(get, set):String;
-
 	public var virtualPad:FlxVirtualPad;
 	public var hitbox:FlxHitbox;
 
@@ -22,24 +16,41 @@ class AndroidControls extends FlxSpriteGroup
 	{
 		super();
 
-		switch (androidControls.mode)
+		switch (AndroidControls.getMode())
 		{
-			case 'Pad-Right':
+			case 0: // RIGHT_FULL
+				initControler(0);
+			case 1: // LEFT_FULL
+				initControler(1);
+			case 2: // CUSTOM
+				initControler(2);
+			case 3: // BOTH_FULL
+				initControler(3);
+			case 4: // HITBOX
+				initControler(4);
+			case 5: // KEYBOARD
+		}
+	}
+
+	private function initControler(virtualPadMode:Int = 0):Void
+	{
+		switch (virtualPadMode)
+		{
+			case 0:
 				virtualPad = new FlxVirtualPad(RIGHT_FULL, NONE);
 				add(virtualPad);
-			case 'Pad-Left':
+			case 1:
 				virtualPad = new FlxVirtualPad(LEFT_FULL, NONE);
 				add(virtualPad);
-			case 'Pad-Custom':
-				virtualPad = AndroidControls.customVirtualPad;
+			case 2:
+				virtualPad = AndroidControls.getCustomMode(new FlxVirtualPad(RIGHT_FULL, NONE));
 				add(virtualPad);
-			case 'Pad-Duo':
+			case 3:
 				virtualPad = new FlxVirtualPad(BOTH_FULL, NONE);
 				add(virtualPad);
-			case 'Hitbox':
+			case 4:
 				hitbox = new FlxHitbox();
 				add(hitbox);
-			case 'Keyboard': // do nothing
 		}
 	}
 
@@ -60,52 +71,47 @@ class AndroidControls extends FlxSpriteGroup
 		}
 	}
 
-	private static function get_mode():String
+	public static function setOpacity(opacity:Float = 0.6):Void
 	{
-		if (FlxG.save.data.controlsMode == null)
+		FlxG.save.data.androidControlsOpacity = opacity;
+		FlxG.save.flush();
+	}
+
+	public static function getOpacity():Float
+	{
+		if (FlxG.save.data.androidControlsOpacity == null)
 		{
-			FlxG.save.data.controlsMode = 'Pad-Right';
+			FlxG.save.data.androidControlsOpacity = 0.6;
 			FlxG.save.flush();
 		}
 
-		return FlxG.save.data.controlsMode;
+		return FlxG.save.data.androidControlsOpacity;
 	}
 
-	private static function set_mode(mode:String = 'Pad-Right'):String
+	public static function setMode(mode:Int = 0):Void
 	{
-		FlxG.save.data.controlsMode = mode;
+		FlxG.save.data.androidControlsMode = mode;
 		FlxG.save.flush();
-
-		return mode;
 	}
 
-	private static function get_customVirtualPad():FlxVirtualPad
+	public static function getMode():Int
 	{
-		var virtualPad:FlxVirtualPad = new FlxVirtualPad(RIGHT_FULL, NONE);
-		if (FlxG.save.data.buttons == null)
-			return virtualPad;
-
-		var tempCount:Int = 0;
-		for (buttons in virtualPad)
+		if (FlxG.save.data.androidControlsMode == null)
 		{
-			buttons.x = FlxG.save.data.buttons[tempCount].x;
-			buttons.y = FlxG.save.data.buttons[tempCount].y;
-			tempCount++;
+			FlxG.save.data.androidControlsMode = 0;
+			FlxG.save.flush();
 		}
 
-		return virtualPad;
+		return FlxG.save.data.androidControlsMode;
 	}
 
-	private static function set_customVirtualPad(virtualPad:FlxVirtualPad):FlxVirtualPad
+	public static function setCustomMode(virtualPad:FlxVirtualPad):Void
 	{
 		if (FlxG.save.data.buttons == null)
 		{
 			FlxG.save.data.buttons = new Array();
 			for (buttons in virtualPad)
-			{
 				FlxG.save.data.buttons.push(FlxPoint.get(buttons.x, buttons.y));
-				FlxG.save.flush();
-			}
 		}
 		else
 		{
@@ -113,9 +119,25 @@ class AndroidControls extends FlxSpriteGroup
 			for (buttons in virtualPad)
 			{
 				FlxG.save.data.buttons[tempCount] = FlxPoint.get(buttons.x, buttons.y);
-				FlxG.save.flush();
 				tempCount++;
 			}
+		}
+
+		FlxG.save.flush();
+	}
+
+	public static function getCustomMode(virtualPad:FlxVirtualPad):FlxVirtualPad
+	{
+		var tempCount:Int = 0;
+
+		if (FlxG.save.data.buttons == null)
+			return virtualPad;
+
+		for (buttons in virtualPad)
+		{
+			buttons.x = FlxG.save.data.buttons[tempCount].x;
+			buttons.y = FlxG.save.data.buttons[tempCount].y;
+			tempCount++;
 		}
 
 		return virtualPad;
