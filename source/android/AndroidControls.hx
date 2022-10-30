@@ -10,7 +10,7 @@ import android.flixel.FlxVirtualPad;
 /**
  * @author Mihai Alexandru (M.A. Jigsaw)
  */
-class MobileControls extends FlxSpriteGroup
+class AndroidControls extends FlxSpriteGroup
 {
 	public static var customVirtualPad(get, set):FlxVirtualPad;
 	public static var mode(get, set):String;
