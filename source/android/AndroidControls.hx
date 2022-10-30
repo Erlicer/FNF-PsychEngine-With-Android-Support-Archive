@@ -22,7 +22,7 @@ class AndroidControls extends FlxSpriteGroup
 	{
 		super();
 
-		switch (AndroidControls.mode)
+		switch (androidControls.mode)
 		{
 			case 'Pad-Right':
 				virtualPad = new FlxVirtualPad(RIGHT_FULL, NONE);
